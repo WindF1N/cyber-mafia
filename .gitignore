@@ -1,0 +1,6 @@
+venv
+__pycache__
+static
+avatars
+events
+order_tables
