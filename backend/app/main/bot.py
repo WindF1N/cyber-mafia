@@ -167,6 +167,7 @@ async def process_avatar(message: types.Message, state: FSMContext):
             user.main_city = await sync_to_async(City.objects.get)(id=main_city_id)
             user.phone = data['phone']
             user.first_name = data['name']
+            user.is_registered = True
             await sync_to_async(user.save)()
         else:
             data['avatar'] = None
@@ -179,6 +180,7 @@ async def process_avatar(message: types.Message, state: FSMContext):
             user.main_city = await sync_to_async(City.objects.get)(id=main_city_id)
             user.phone = data['phone']
             user.first_name = data['name']
+            user.is_registered = True
             await sync_to_async(user.save)()
     await state.finish()
     await bot.send_message(message.chat.id, "Отлично!")
