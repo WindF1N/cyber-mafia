@@ -1,0 +1,540 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Grtsk Tera Bkslnt';
+  src: url('font/GrtskTeraBkslnt-Bold.eot');
+  src: local('Grtsk Tera Bkslnt Bold'), local('GrtskTeraBkslnt-Bold'),
+      url('font/GrtskTeraBkslnt-Bold.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTeraBkslnt-Bold.woff2') format('woff2'),
+      url('font/GrtskTeraBkslnt-Bold.woff') format('woff'),
+      url('font/GrtskTeraBkslnt-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera Bkslnt';
+  src: url('font/GrtskTeraBkslnt-Light.eot');
+  src: local('Grtsk Tera Bkslnt Light'), local('GrtskTeraBkslnt-Light'),
+      url('font/GrtskTeraBkslnt-Light.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTeraBkslnt-Light.woff2') format('woff2'),
+      url('font/GrtskTeraBkslnt-Light.woff') format('woff'),
+      url('font/GrtskTeraBkslnt-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera Bkslnt';
+  src: url('font/GrtskTeraBkslnt-Extralight.eot');
+  src: local('Grtsk Tera Bkslnt Extralight'), local('GrtskTeraBkslnt-Extralight'),
+      url('font/GrtskTeraBkslnt-Extralight.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTeraBkslnt-Extralight.woff2') format('woff2'),
+      url('font/GrtskTeraBkslnt-Extralight.woff') format('woff'),
+      url('font/GrtskTeraBkslnt-Extralight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera Bkslnt';
+  src: url('font/GrtskTeraBkslnt-Regular.eot');
+  src: local('Grtsk Tera Bkslnt Regular'), local('GrtskTeraBkslnt-Regular'),
+      url('font/GrtskTeraBkslnt-Regular.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTeraBkslnt-Regular.woff2') format('woff2'),
+      url('font/GrtskTeraBkslnt-Regular.woff') format('woff'),
+      url('font/GrtskTeraBkslnt-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera Bkslnt';
+  src: url('font/GrtskTeraBkslnt-Medium.eot');
+  src: local('Grtsk Tera Bkslnt Medium'), local('GrtskTeraBkslnt-Medium'),
+      url('font/GrtskTeraBkslnt-Medium.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTeraBkslnt-Medium.woff2') format('woff2'),
+      url('font/GrtskTeraBkslnt-Medium.woff') format('woff'),
+      url('font/GrtskTeraBkslnt-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera Bkslnt';
+  src: url('font/GrtskTeraBkslnt-Thin.eot');
+  src: local('Grtsk Tera Bkslnt Thin'), local('GrtskTeraBkslnt-Thin'),
+      url('font/GrtskTeraBkslnt-Thin.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTeraBkslnt-Thin.woff2') format('woff2'),
+      url('font/GrtskTeraBkslnt-Thin.woff') format('woff'),
+      url('font/GrtskTeraBkslnt-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-Bold.eot');
+  src: local('Grtsk Tera Bold'), local('GrtskTera-Bold'),
+      url('font/GrtskTera-Bold.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-Bold.woff2') format('woff2'),
+      url('font/GrtskTera-Bold.woff') format('woff'),
+      url('font/GrtskTera-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera Bkslnt';
+  src: url('font/GrtskTeraBkslnt-Semibold.eot');
+  src: local('Grtsk Tera Bkslnt Semibold'), local('GrtskTeraBkslnt-Semibold'),
+      url('font/GrtskTeraBkslnt-Semibold.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTeraBkslnt-Semibold.woff2') format('woff2'),
+      url('font/GrtskTeraBkslnt-Semibold.woff') format('woff'),
+      url('font/GrtskTeraBkslnt-Semibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-Italic.eot');
+  src: local('Grtsk Tera Italic'), local('GrtskTera-Italic'),
+      url('font/GrtskTera-Italic.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-Italic.woff2') format('woff2'),
+      url('font/GrtskTera-Italic.woff') format('woff'),
+      url('font/GrtskTera-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-Extralight.eot');
+  src: local('Grtsk Tera Extralight'), local('GrtskTera-Extralight'),
+      url('font/GrtskTera-Extralight.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-Extralight.woff2') format('woff2'),
+      url('font/GrtskTera-Extralight.woff') format('woff'),
+      url('font/GrtskTera-Extralight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-BoldItalic.eot');
+  src: local('Grtsk Tera Bold Italic'), local('GrtskTera-BoldItalic'),
+      url('font/GrtskTera-BoldItalic.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-BoldItalic.woff2') format('woff2'),
+      url('font/GrtskTera-BoldItalic.woff') format('woff'),
+      url('font/GrtskTera-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-ExtralightItalic.eot');
+  src: local('Grtsk Tera Extralight Italic'), local('GrtskTera-ExtralightItalic'),
+      url('font/GrtskTera-ExtralightItalic.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-ExtralightItalic.woff2') format('woff2'),
+      url('font/GrtskTera-ExtralightItalic.woff') format('woff'),
+      url('font/GrtskTera-ExtralightItalic.ttf') format('truetype');
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-LightItalic.eot');
+  src: local('Grtsk Tera Light Italic'), local('GrtskTera-LightItalic'),
+      url('font/GrtskTera-LightItalic.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-LightItalic.woff2') format('woff2'),
+      url('font/GrtskTera-LightItalic.woff') format('woff'),
+      url('font/GrtskTera-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-Regular.eot');
+  src: local('Grtsk Tera Regular'), local('GrtskTera-Regular'),
+      url('font/GrtskTera-Regular.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-Regular.woff2') format('woff2'),
+      url('font/GrtskTera-Regular.woff') format('woff'),
+      url('font/GrtskTera-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-SemiboldItalic.eot');
+  src: local('Grtsk Tera Semibold Italic'), local('GrtskTera-SemiboldItalic'),
+      url('font/GrtskTera-SemiboldItalic.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-SemiboldItalic.woff2') format('woff2'),
+      url('font/GrtskTera-SemiboldItalic.woff') format('woff'),
+      url('font/GrtskTera-SemiboldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-Thin.eot');
+  src: local('Grtsk Tera Thin'), local('GrtskTera-Thin'),
+      url('font/GrtskTera-Thin.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-Thin.woff2') format('woff2'),
+      url('font/GrtskTera-Thin.woff') format('woff'),
+      url('font/GrtskTera-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-Semibold.eot');
+  src: local('Grtsk Tera Semibold'), local('GrtskTera-Semibold'),
+      url('font/GrtskTera-Semibold.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-Semibold.woff2') format('woff2'),
+      url('font/GrtskTera-Semibold.woff') format('woff'),
+      url('font/GrtskTera-Semibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-Light.eot');
+  src: local('Grtsk Tera Light'), local('GrtskTera-Light'),
+      url('font/GrtskTera-Light.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-Light.woff2') format('woff2'),
+      url('font/GrtskTera-Light.woff') format('woff'),
+      url('font/GrtskTera-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-ThinItalic.eot');
+  src: local('Grtsk Tera Thin Italic'), local('GrtskTera-ThinItalic'),
+      url('font/GrtskTera-ThinItalic.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-ThinItalic.woff2') format('woff2'),
+      url('font/GrtskTera-ThinItalic.woff') format('woff'),
+      url('font/GrtskTera-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-Medium.eot');
+  src: local('Grtsk Tera Medium'), local('GrtskTera-Medium'),
+      url('font/GrtskTera-Medium.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-Medium.woff2') format('woff2'),
+      url('font/GrtskTera-Medium.woff') format('woff'),
+      url('font/GrtskTera-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grtsk Tera';
+  src: url('font/GrtskTera-MediumItalic.eot');
+  src: local('Grtsk Tera Medium Italic'), local('GrtskTera-MediumItalic'),
+      url('font/GrtskTera-MediumItalic.eot?#iefix') format('embedded-opentype'),
+      url('font/GrtskTera-MediumItalic.woff2') format('woff2'),
+      url('font/GrtskTera-MediumItalic.woff') format('woff'),
+      url('font/GrtskTera-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+:root {
+  font-family: 'Grtsk Tera';
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background: linear-gradient(to top, #040403 0%, #030303 100%);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  /* :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  } */
+}
+
+/* Медиа-запрос для смартфонов */
+@media (max-width: 600px) {
+  #root {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+}
+
+/* Медиа-запрос для компьютеров */
+@media (min-width: 431px) {
+  #root {
+    position: relative;
+    width: 420px; /* Максимальная ширина контента */
+    /* border-left: 1px solid #fff; */
+    /* border-right: 1px solid #fff; */
+    overflow: hidden;
+    margin: auto;
+  }
+
+  .menu {
+    max-width: 380px;
+    margin: auto;
+  }
+}
+
+/* @media (max-height: 780px) {
+  .loading-image {
+    margin-top: -3%;
+  }
+  .beta, .percents  {
+    margin-bottom: 1.5%;
+  }
+}
+
+@media (max-height: 740px) {
+  .loading-image {
+    margin-top: -4.5%;
+  }
+  .beta {
+    margin-bottom: 1.5%;
+  }
+  .percents {
+    margin-bottom: -0.5%;
+  }
+}
+
+@media (max-height: 720px) {
+  .loading-image {
+    margin-top: -5.5%;
+  }
+  .beta {
+    margin-bottom: 1%;
+  }
+  .percents {
+    margin-bottom: -1.5%;
+  }
+}
+
+@media (max-height: 690px) {
+  .loading-image {
+    margin-top: -6%;
+  }
+  .beta {
+    margin-bottom: 0%;
+  }
+  .percents {
+    margin-bottom: -4.5%;
+  }
+} */
+
+@media (min-height: 721px) {
+  @media (max-width: 390px) {
+    .beta {
+      bottom: 36.6%;
+    }
+    .percents {
+      bottom: 18.07%;
+    }
+    .bar {
+      bottom: 14.73%;
+    }
+  }
+  @media (min-width: 391px) {
+    .beta {
+      bottom: 38.6%;
+    }
+    .percents {
+      bottom: 18.07%;
+    }
+    .bar {
+      bottom: 14.73%;
+    }
+  }
+}
+
+@media (max-height: 720px) {
+  @media (max-width: 390px) {
+    .beta {
+      bottom: 42%;
+    }
+    .percents {
+      bottom: 20.07%;
+    }
+    .bar {
+      bottom: 16.73%;
+    }
+  }
+  @media (min-width: 391px) {
+    .beta {
+      bottom: 43%;
+    }
+    .percents {
+      bottom: 21.07%;
+    }
+    .bar {
+      bottom: 17.73%;
+    }
+  }
+}
+
+@media (max-height: 660px) {
+  @media (max-width: 390px) {
+    .beta {
+      bottom: 44.6%;
+    }
+    .percents {
+      bottom: 21.07%;
+    }
+    .bar {
+      bottom: 17.73%;
+    }
+  }
+  @media (min-width: 391px) {
+    .beta {
+      bottom: 48.6%;
+    }
+    .percents {
+      bottom: 22.07%;
+    }
+    .bar {
+      bottom: 18.73%;
+    }
+  }
+}
+
+@media (max-height: 620px) {
+  @media (max-width: 390px) {
+    .beta {
+      bottom: 47.6%;
+    }
+    .percents {
+      bottom: 22.07%;
+    }
+    .bar {
+      bottom: 18.73%;
+    }
+  }
+  @media (min-width: 391px) {
+    .beta {
+      bottom: 50.6%;
+    }
+    .percents {
+      bottom: 22.07%;
+    }
+    .bar {
+      bottom: 18.73%;
+    }
+  }
+}
+
+/* Анимация для текста с процентами */
+@keyframes animatePercent {
+  0% { content: "0%"; }
+  25% { content: "25%"; }
+  50% { content: "50%"; }
+  100% { content: "100%"; }
+}
+
+.percents::after {
+  content: "0%"; /* Исходный текст */
+  animation: animatePercent 4s ease-in-out forwards;
+}
+
+/* Анимация для бара */
+@keyframes animateBar {
+  0% { width: 0%; }
+  25% { width: 25%; }
+  50% { width: 50%; }
+  100% { width: 100%; }
+}
+
+/* Анимация для бара */
+@keyframes animateActiveMenuItem {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+.active-menu {
+  animation: animateActiveMenuItem 0.2s ease-in-out forwards;
+}
+
+.bar > div {
+  width: 0%; /* Исходная ширина */
+  animation: animateBar 4s ease-in-out forwards;
+}
+
+.button-container {
+  transition: transform 0.1s ease-out;
+}
+
+.button-container.clicked {
+  transform: scale(0.95);
+}
+
