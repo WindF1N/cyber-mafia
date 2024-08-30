@@ -17,6 +17,7 @@ import re
 
 from main.models import CustomUser, City, Event, Participant, Order, OrderTable
 from django.conf import settings
+from django.db import close_old_connections, connections
 from asgiref.sync import sync_to_async
 from django.core.exceptions import ObjectDoesNotExist
 import io
@@ -76,7 +77,17 @@ async def return_to_home(message: types.Message, state: FSMContext):
 @dp.message_handler(commands=['start'], state='*')
 async def send_welcome(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
-    user, created = await sync_to_async(CustomUser.objects.get_or_create)(username=str(user_id))
+    
+    # Закрытие старых соединений
+    await sync_to_async(close_old_connections)()
+    
+    try:
+        user, created = await sync_to_async(CustomUser.objects.get_or_create)(username=str(user_id))
+    except Exception as e:
+        # Обработка ошибки соединения
+        await bot.send_message(message.chat.id, "Произошла ошибка соединения. Повторное подключение...")
+        await sync_to_async(connections['default'].connect)()
+        user, created = await sync_to_async(CustomUser.objects.get_or_create)(username=str(user_id))
     
     if created or not user.is_registered:
         await Form.choosing_city.set()
