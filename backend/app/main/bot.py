@@ -59,6 +59,14 @@ class OrderTableState(StatesGroup):
     upload_photo = State()
 
 # Обработчик команды /home
+@dp.message_handler(commands=['app'])
+async def return_to_home(message: types.Message, state: FSMContext):
+    await state.finish()
+    markup = InlineKeyboardMarkup(row_width=1)
+    markup.insert(InlineKeyboardButton("Запустить приложение", url=f'https://t.me/cyber_mafia_dev_bot/dev'))
+    await bot.send_message(message.chat.id, "Добро пожаловать в приложение")
+
+# Обработчик команды /home
 @dp.message_handler(commands=['home'])
 async def return_to_home(message: types.Message, state: FSMContext):
     await state.finish()
