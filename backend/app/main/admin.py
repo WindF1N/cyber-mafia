@@ -1,30 +1,52 @@
 from django.contrib import admin
-from .models import CustomUser, City, Event, Participant, Order, OrderTable
+from .models import City, District, Level, Role, Game, Peculiarity, CustomUser, Participant
 
-# Регистрация модели Event
-@admin.register(Event)
-class EventAdmin(admin.ModelAdmin):
-    list_display = ('name', 'city', 'current_players', 'max_players')  # Поля, которые будут отображаться в списке городов
-    search_fields = ('name', 'city')  # Поля, по которым можно выполнять поиск
-
-# Регистрация модели City
+# Регистрация моделей в админ-панели
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
-    list_display = ('name',)  # Поля, которые будут отображаться в списке городов
-    search_fields = ('name',)  # Поля, по которым можно выполнять поиск
+    list_display = ('name', 'name_in_prepositional_case')
+    search_fields = ('name', 'name_in_prepositional_case')
 
-# Регистрация модели CustomUser
+@admin.register(District)
+class DistrictAdmin(admin.ModelAdmin):
+    list_display = ('name', 'city')
+    search_fields = ('name', 'city__name')
+    list_filter = ('city',)
+
+@admin.register(Level)
+class LevelAdmin(admin.ModelAdmin):
+    list_display = ('name', 'need_victories')
+    search_fields = ('name',)
+    list_filter = ('need_victories',)
+
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+
+@admin.register(Game)
+class GameAdmin(admin.ModelAdmin):
+    list_display = ('city', 'datetime', 'address', 'max_players')
+    search_fields = ('city__name', 'address', 'theme')
+    list_filter = ('city', 'datetime')
+
+@admin.register(Peculiarity)
+class PeculiarityAdmin(admin.ModelAdmin):
+    list_display = ('game', 'label', 'value')
+    search_fields = ('game__city__name', 'label', 'value')
+    list_filter = ('game__city',)
+
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'first_name', 'last_name', 'email', 'city', 'main_city', 'phone', 'avatar')  # Поля, которые будут отображаться в списке пользователей
-    list_filter = ('city', 'main_city')  # Поля, по которым можно фильтровать пользователей
-    search_fields = ('username', 'first_name', 'last_name', 'email')  # Поля, по которым можно выполнять поиск
+    list_display = ('username', 'first_name', 'city', 'phone', 'avatar', 'is_registered')
+    list_filter = ('city', 'is_registered')
+    search_fields = ('username', 'first_name', 'phone')
     fieldsets = (
         (None, {
             'fields': ('username', 'password')
         }),
         ('Personal info', {
-            'fields': ('first_name', 'last_name', 'email')
+            'fields': ('first_name', 'last_name', 'email', 'avatar', 'sex', 'phone', 'city', 'district', 'nickname', 'level')
         }),
         ('Permissions', {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
@@ -32,26 +54,13 @@ class CustomUserAdmin(admin.ModelAdmin):
         ('Important dates', {
             'fields': ('last_login', 'date_joined')
         }),
-        ('Additional info', {
-            'fields': ('city', 'main_city', 'phone', 'avatar', 'games_played', 'points_earned', 'games_played_this_month', 'game_evenings_this_month', 'is_registered')
+        ('Registration status', {
+            'fields': ('is_registered',)
         }),
     )
 
 @admin.register(Participant)
 class ParticipantAdmin(admin.ModelAdmin):
-    list_display = ('user', 'event', 'friends_count', 'created_at')
-    list_filter = ('event', 'created_at')
-    search_fields = ('user__username', 'event__name')
-
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'event_type', 'date', 'comment', 'created_at')
-    list_filter = ('event_type', 'date', 'created_at')
-    search_fields = ('user__username', 'event_type', 'comment')
-
-# Регистрация модели OrderTable
-@admin.register(OrderTable)
-class OrderTableAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'game_name', 'real_name', 'photo', 'created_at')
-    list_filter = ('created_at',)
-    search_fields = ('user__username', 'game_name', 'real_name')
+    list_display = ('user', 'game', 'role', 'created_at')
+    list_filter = ('game', 'role', 'created_at')
+    search_fields = ('user__username', 'game__city__name', 'role__name')

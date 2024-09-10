@@ -254,6 +254,37 @@
   font-style: italic;
 }
 
+/* Для WebKit-based браузеров (Chrome, Safari, Opera 15+) */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Для Firefox */
+html {
+  scrollbar-width: none; /* Firefox 64+ */
+}
+
+/* Для IE и Edge */
+body {
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+  -moz-user-drag: none;
+}
+
+/* Запрет выделения контента */
+body {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+  overflow-x: hidden;
+  touch-action: none !important;
+}
+
 :root {
   font-family: 'Grtsk Tera';
   line-height: 1.5;
@@ -261,7 +292,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background: #000;
+  background: #000614;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

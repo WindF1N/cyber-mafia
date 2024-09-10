@@ -10,8 +10,8 @@ function App() {
       const tg = window.Telegram.WebApp;
       // Отключаем вертикальные свайпы
       tg.disableVerticalSwipes(true);
-      tg.setHeaderColor("#000000");
-      tg.setBackgroundColor("#000000")
+      tg.setHeaderColor("#000614");
+      tg.setBackgroundColor("#000614")
     }
   }, [window.Telegram, window.Telegram?.WebApp])
   const [isLoading, setIsLoading] = useState(true);

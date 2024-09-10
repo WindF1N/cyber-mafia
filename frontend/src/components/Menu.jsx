@@ -19,7 +19,7 @@ function Menu({ currentPage }) {
   ];
 
   return (
-    <div className="fixed bottom-[2.67%] left-[5.13%] right-[5.13%] bg-[rgba(0,0,0,.2)] backdrop-blur-[40px] w-[89.74%] z-[3] max-w-[380px] mx-auto">
+    <div className="fixed bottom-[2.67%] left-[5.13%] right-[5.13%] bg-[rgba(87,87,87,0.1)] backdrop-blur-[40px] w-[89.74%] z-[3] max-w-[380px] mx-auto" style={{clipPath: "polygon(0% 0%, 100% 0%, 100% 76.6%, 94.4% 100%, 5.6% 100%, 0% 76.6%)"}}>
       <img src={menuBGImage} alt="" className="w-[100%]" />
       <div className="absolute inset-0 w-[100%] h-[100%] flex justify-around overflow-hidden">
         {menuItems.map((item) => (
