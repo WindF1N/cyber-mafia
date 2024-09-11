@@ -7,6 +7,7 @@ import rectangle2Icon from '../assets/rectangle2.svg';
 import warnIcon from '../assets/warn.svg';
 import frameIcon from '../assets/frame_.svg';
 import goPlayImage from '../assets/go_play.png';
+import useAccount from '../hooks/useAccount';
 
 function Home() {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ function Home() {
     var BackButton = window.Telegram.WebApp.BackButton;
     BackButton.hide();
   }, [])
+  const apiUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+  const account = useAccount((state) => state.account);
   return (
     <div className="relative w-[100%] h-screen bg-black overflow-hidden">
       <img src={profileImage} 
@@ -24,13 +27,13 @@ function Home() {
         <div className="relative cursor-pointer w-[69.571%]" onClick={() => navigate("/profile")}>
             <img src={rectangle1Icon} alt="" className="w-[100%] backdrop-blur-[40px]" style={{clipPath: 'polygon(0% 0%, 91.5% 0%, 100% 26%, 100% 100%, 8.2% 100%, -24.5% 0%)'}} />
             <div className="absolute inset-0 w-[100%] h-[100%] flex items-center gap-[2.05%]">
-              <div className="relative h-[72.5%] my-[12.5%] mx-[4.11%]" style={{clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 20% 100%, 0% 80%)'}}>
-                <img src={avatarImage} alt="" className="w-[100%] h-[100%] object-cover" />
+              <div className="relative h-[58px] w-[58px] my-[12.5%] mx-[4.11%]" style={{clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 20% 100%, 0% 80%)'}}>
+                <img src={account.user.avatar ? apiUrl+account.user.avatar : avatarImage} alt="" className="w-[100%] h-[100%] object-cover" />
                 <img src={frameIcon} alt="" className="absolute inset-0 w-[100%] h-[100%] object-cover" />
               </div>
               <div className="flex flex-col">
-                <div className="uppercase font-[600] text-[14px] leading-[16.8px] text-white mb-[14.5%]">Никнейм</div>
-                <div className="uppercase font-[400] text-[12px] leading-[14.4px] text-[rgba(255,255,255,0.7)]">Какая лига</div>
+                <div className="uppercase font-[600] text-[14px] leading-[16.8px] text-white mb-[14.5%]">{account.user.first_name || account.user.nickname}</div>
+                <div className="uppercase font-[400] text-[12px] leading-[14.4px] text-[rgba(255,255,255,0.7)]">{account.city.name}</div>
               </div>
             </div>
         </div>

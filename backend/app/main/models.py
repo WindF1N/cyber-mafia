@@ -14,7 +14,7 @@ class City(models.Model):
 
 class District(models.Model):
     city = models.ForeignKey(City, related_name='districts', on_delete=models.CASCADE, verbose_name="Город")
-    name = models.CharField(max_length=255, unique=True, verbose_name="Название")
+    name = models.CharField(max_length=255, verbose_name="Название")
 
     def __str__(self):
         return self.name
@@ -99,7 +99,7 @@ class CustomUser(AbstractUser):
     # activity - Активность
 
     def save(self, *args, **kwargs):
-        if self.avatar and self.phone and self.city:
+        if self.phone and self.city:
             self.is_registered = True
         super().save(*args, **kwargs)
 

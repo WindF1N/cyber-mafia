@@ -44,6 +44,21 @@ class Form(StatesGroup):
     editing_avatar = State()
     afisha_editing_city = State()
 
+async def check_user_exists(user_id):
+    # Закрытие старых соединений
+    await sync_to_async(close_old_connections)()
+    
+    try:
+        user = await sync_to_async(CustomUser.objects.get)(username=str(user_id))
+    except CustomUser.DoesNotExist:
+        return False
+    except Exception as e:
+        # Обработка ошибки соединения
+        await sync_to_async(connections['default'].connect)()
+        user = await sync_to_async(CustomUser.objects.get)(username=str(user_id))
+
+    return user is not None and user.is_registered == True
+
 @dp.callback_query_handler(lambda c: c.data == 'go_main')
 async def return_to_main_menu(callback_query: types.CallbackQuery, state: FSMContext):
     await state.finish()
@@ -59,6 +74,12 @@ async def return_to_main_menu(callback_query: types.CallbackQuery, state: FSMCon
 @dp.message_handler(commands=['webapp'])
 async def return_to_home(message: types.Message, state: FSMContext):
     await state.finish()
+    check = await check_user_exists(message.from_user.id)
+    if check == False:
+        msg = await bot.send_message(message.chat.id, "Вы не зарегистрированы, пройдите регистрацию, используя команду /start")
+        # Обновляем сообщения
+        await update_messages(bot, message.chat.id, [message.message_id, msg.message_id])
+        return
     markup = InlineKeyboardMarkup(row_width=1)
     markup.insert(InlineKeyboardButton("Запустить приложение", url=f'https://t.me/cyber_mafia_dev_bot/dev'))
     msg = await bot.send_message(message.chat.id, "Добро пожаловать в приложение", reply_markup=markup)
@@ -69,6 +90,12 @@ async def return_to_home(message: types.Message, state: FSMContext):
 @dp.message_handler(commands=['home'])
 async def return_to_home(message: types.Message, state: FSMContext):
     await state.finish()
+    check = await check_user_exists(message.from_user.id)
+    if check == False:
+        msg = await bot.send_message(message.chat.id, "Вы не зарегистрированы, пройдите регистрацию, используя команду /start")
+        # Обновляем сообщения
+        await update_messages(bot, message.chat.id, [message.message_id, msg.message_id])
+        return
     msg = await bot.send_message(message.chat.id, "Хорошо, возвращаемся в главное меню")
     # Обновляем сообщения
     await update_messages(bot, message.chat.id, [message.message_id, msg.message_id])
@@ -262,6 +289,8 @@ async def show_profile(message: types.Message):
         if user.avatar:
             with open(user.avatar.path, 'rb') as photo:
                 msg = await bot.send_photo(message.from_user.id, photo)
+        else:
+            msg = {"message_id": None}
 
         # Второе сообщение с информацией о профиле
         profile_info = f"""
@@ -417,6 +446,12 @@ async def process_edit_avatar(message: types.Message, state: FSMContext):
 # Обработчик команды /poster
 @dp.message_handler(commands=['poster'])
 async def send_afisha(message: types.Message, city=None):
+    check = await check_user_exists(message.chat.id)
+    if check == False:
+        msg = await bot.send_message(message.chat.id, "Вы не зарегистрированы, пройдите регистрацию, используя команду /start")
+        # Обновляем сообщения
+        await update_messages(bot, message.chat.id, [message.message_id, msg.message_id])
+        return
     user_id = message.chat.id
     user = await sync_to_async(CustomUser.objects.get)(username=str(user_id))
     # Получение мероприятий в текущем городе пользователя
@@ -688,6 +723,12 @@ async def remove_booking(callback_query: types.CallbackQuery, state: FSMContext)
 # Обработчик команды /statistic
 @dp.message_handler(commands=['statistic'])
 async def send_statistic_link(message: types.Message):
+    check = await check_user_exists(message.from_user.id)
+    if check == False:
+        msg = await bot.send_message(message.chat.id, "Вы не зарегистрированы, пройдите регистрацию, используя команду /start")
+        # Обновляем сообщения
+        await update_messages(bot, message.chat.id, [message.message_id, msg.message_id])
+        return
     markup = types.InlineKeyboardMarkup(row_width=2)
     markup.add(
         types.InlineKeyboardButton(f"Афиша игр 🎟️", callback_data=f'go_poster'),
@@ -717,6 +758,12 @@ async def send_statistic_link(message: types.Message):
 # Обработчик команды /myclub
 @dp.message_handler(commands=['myclub'])
 async def send_myclub_link(message: types.Message, state=FSMContext):
+    check = await check_user_exists(message.from_user.id)
+    if check == False:
+        msg = await bot.send_message(message.chat.id, "Вы не зарегистрированы, пройдите регистрацию, используя команду /start")
+        # Обновляем сообщения
+        await update_messages(bot, message.chat.id, [message.message_id, msg.message_id])
+        return
     markup = types.InlineKeyboardMarkup()
     markup.add(types.InlineKeyboardButton("Написать участнику ✉️", callback_data="chat_participant"))
     msg1 = await bot.send_message(message.chat.id, f"""
@@ -750,6 +797,12 @@ async def send_myclub_link(message: types.Message, state=FSMContext):
 # Обработчик команды /rules
 @dp.message_handler(commands=['rules'])
 async def send_rules_link(message: types.Message):
+    check = await check_user_exists(message.from_user.id)
+    if check == False:
+        msg = await bot.send_message(message.chat.id, "Вы не зарегистрированы, пройдите регистрацию, используя команду /start")
+        # Обновляем сообщения
+        await update_messages(bot, message.chat.id, [message.message_id, msg.message_id])
+        return
     markup = types.InlineKeyboardMarkup(row_width=1)
     markup.add(
         types.InlineKeyboardButton("Ссылка", url='https://google.com'),

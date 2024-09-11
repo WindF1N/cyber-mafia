@@ -6,10 +6,11 @@ import shareIcon from '../assets/share.svg';
 import hackerIcon from '../assets/hacker.svg';
 import cyberdetectivIcon from '../assets/cyberdetectiv.svg';
 import corporatespyIcon from '../assets/corporatespy.svg';
+import useAccount from '../hooks/useAccount';
 
 function Profile() {
-    const navigate = useNavigate();
-    useEffect(() => {
+  const navigate = useNavigate();
+  useEffect(() => {
         var BackButton = window.Telegram.WebApp.BackButton;
         if (window.location.pathname === "/profile") {
             BackButton.show();
@@ -20,17 +21,19 @@ function Profile() {
         } else {
             BackButton.hide();
         }
-    }, [window.location.pathname])
+  }, [window.location.pathname])
+  const apiUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+  const account = useAccount((state) => state.account);
   return (
     <div className="relative w-[100%] min-h-screen bg-[#000614] overflow-hidden pb-[200px]">
       <div className="relative flex items-center justify-center w-[100%] h-[70px] mt-[2.66%] px-[5.128%]">
         <div className="relative w-[18.35%] min-w-[71.58px] h-[100%] flex-shrink-0 bg-white" style={{clipPath: 'polygon(0% 0%, 93.6% 0%, 93.6% 21.43%, 100% 27.14%, 100% 58.57%, 93.6% 63.43%, 93.6% 100%, 24.03% 100%, 0% 78.57%)'}}>
-          <img className="w-[100%] h-[100%] object-cover" src={avatarImage} />
+          <img className="w-[100%] h-[100%] object-cover" src={account.user.avatar ? apiUrl+account.user.avatar : avatarImage} />
           <img className="w-[89.41%] absolute inset-0 left-[4.19%]" src={frameIcon} />
         </div>
         <div className="relative w-[100%] h-[100%] bg-[#1B1F28] py-[10px] px-[3.91%]" style={{clipPath: 'polygon(0% 0%, 100% 0%, 100% 79.71%, 93.53% 100%, 0% 100%, 0% 63.43%, 1.799% 58.57%, 1.799% 27.14%, 0% 21.43%)'}}>
-          <div className="uppercase font-[600] text-[14px] leading-[16.8px] text-[#fff]">Никнейм</div>
-          <div className="uppercase font-[400] text-[10px] leading-[12px] text-[#25E9FF] mt-[5px]">Какая лига</div>
+          <div className="uppercase font-[600] text-[14px] leading-[16.8px] text-[#fff]">{account.user.first_name || account.user.nickname}</div>
+          <div className="uppercase font-[400] text-[10px] leading-[12px] text-[#25E9FF] mt-[5px]">{account.city.name}</div>
           <div className="uppercase font-[400] text-[10px] leading-[12px] text-[rgba(255,255,255,0.5)] mt-[5px]">Sample заглушка</div>
           <img src={shareIcon} alt="" className="w-[24px] h-[24px] absolute right-[10px] top-[10px] cursor-pointer" />
         </div>

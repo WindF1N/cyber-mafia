@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-xn&&i)rrv%uk+yh9w-jc3kro5&*^s!eou985ayv(n7)0zbvp_j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -37,12 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'rest_framework',
     'main'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -149,3 +152,11 @@ CACHES = {
 # Настройки для сессий
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+
+TELEGRAM_BOT_TOKEN = '7485718014:AAHGbSQCgY7bM1FTLw8SUw-9NWTK7o3CJMo'
+
+CORS_ALLOWED_ORIGINS = [
+    "https://127.0.0.1:5173",
+    "http://127.0.0.1:5173",
+    "https://172.18.180.15:5173"
+]

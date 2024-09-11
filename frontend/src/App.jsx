@@ -3,6 +3,9 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Menu from './components/Menu';
 import Loading from './components/Loading';
 import OnboardingSlider from './components/OnboardingSlider';
+import useAuthStore from './hooks/useAuthStore';
+import useAccount from './hooks/useAccount';
+import SignUp from './pages/SignUp';
 
 function App() {
   useEffect(() => {
@@ -18,6 +21,49 @@ function App() {
   const [showOnboarding, setShowOnboarding] = useState(!localStorage.getItem('onboardingComplete'));
   const [currentPage, setCurrentPage] = useState('profile');
   const location = useLocation();
+  const { setToken } = useAuthStore();
+  const token = useAuthStore((state) => state.token);
+  const { setAccount } = useAccount();
+  const account = useAccount((state) => state.account);
+
+  const apiUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
+  useEffect(() => {
+    if (isLoading) {
+      const initData = window.Telegram?.WebApp?.initData;
+      if (initData) {
+        fetch(apiUrl + '/auth/telegram/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ initData })
+        })
+        .then(response => response.json())
+        .then(data => {
+            setToken(data.token);
+        })
+        .catch(error => console.error('Error:', error));
+      }
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (token) {
+      fetch(apiUrl+'/me/', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+          }
+      })
+      .then(response => response.json())
+      .then(data => {
+        setAccount(data);
+      })
+      .catch(error => console.error('Error:', error));
+    }
+  }, [token]);
   
   useEffect(() => {
     switch (location.pathname) {
@@ -58,9 +104,12 @@ function App() {
       <OnboardingSlider onComplete={handleOnboardingComplete} />
     ) : (
       <div className="relative flex-1 overflow-auto">
-      <Outlet />
-      {currentPage !== "signup" &&
-      <Menu currentPage={currentPage} />}
+        {(account.user && account.user.is_registered) ?
+        <>
+          <Outlet />
+          <Menu currentPage={currentPage} />
+        </>
+        : <SignUp />}
       </div>
     )}
     </div>
