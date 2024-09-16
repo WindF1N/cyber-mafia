@@ -128,5 +128,5 @@ class Participant(models.Model):
         verbose_name_plural = "Участники"
 
     def __str__(self):
-        return f"{self.user.username} на {self.event.name}"
+        return f"{self.user.username} на {self.game.name}"
     
