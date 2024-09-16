@@ -11,12 +11,12 @@ import Rating from './pages/Rating';
 import Friends from './pages/Friends';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <React.Fragment>
     <Router>
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path="profile/:userId" element={<Profile />} />
           <Route path="payments" element={<Payments />} />
           <Route path="payments/:paymentType" element={<Payment />} />
           <Route path="rating" element={<Rating />} />
@@ -25,5 +25,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </Route>
       </Routes>
     </Router>
-  </React.StrictMode>
+  </React.Fragment>
 );

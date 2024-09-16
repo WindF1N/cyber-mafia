@@ -28,11 +28,11 @@ class Level(models.Model):
     need_victories = models.PositiveIntegerField(verbose_name="Необходимое количество побед")
 
     def __str__(self):
-        return f"Уровень: {self.name}"
+        return f"Лига: {self.name}"
 
     class Meta:
-        verbose_name = "Уровень игрока"
-        verbose_name_plural = "Уровни игроков"
+        verbose_name = "Лига"
+        verbose_name_plural = "Лиги"
 
 class Role(models.Model):
     name = models.CharField(max_length=255, unique=True, verbose_name="Название")
@@ -89,7 +89,8 @@ class CustomUser(AbstractUser):
     city = models.ForeignKey('City', related_name='users', blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Город")
     district = models.ForeignKey('District', related_name='users', blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Район")
     nickname = models.CharField(max_length=255, blank=True, null=True, verbose_name="Никнейм")
-    level = models.ForeignKey('Level', related_name='users', blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Уровень")
+    level = models.ForeignKey('Level', related_name='users', blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Лига")
+    points = models.PositiveIntegerField(default=0, verbose_name="Количество баллов")
     is_registered = models.BooleanField(default=False, verbose_name="Зарегистрирован")
 
     # games_played = models.PositiveIntegerField(default=0, verbose_name="Количество сыгранных игр")
@@ -101,6 +102,11 @@ class CustomUser(AbstractUser):
     def save(self, *args, **kwargs):
         if self.phone and self.city:
             self.is_registered = True
+        if self.level == None:
+            level = Level.objects.filter(need_victories=0).first()
+            if not level:
+                level = Level.objects.create(name="🌱 Кочевник", need_victories=0)
+            self.level = level
         super().save(*args, **kwargs)
 
     def __str__(self):

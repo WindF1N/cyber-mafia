@@ -7,12 +7,13 @@ import urllib.parse
 import hmac
 import hashlib
 from django.conf import settings
+from django.core.cache import cache
 import json
 import traceback
 from .serializers import (
     CustomUserSerializer, CitySerializer, DistrictSerializer, LevelSerializer
 )
-from .models import City, District, Level
+from .models import City, District
 
 User = get_user_model()
 
@@ -69,6 +70,13 @@ class AccountInfoView(APIView):
             return Response({'error': 'Invalid token'}, status=status.HTTP_401_UNAUTHORIZED)
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        userId = request.GET.get("userId")
+        if userId:
+            try:
+                user = User.objects.get(id=userId)
+            except User.DoesNotExist:
+                return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         
         account_info = {
             'user': CustomUserSerializer(user).data,
@@ -188,3 +196,52 @@ class DistrictsView(APIView):
             'districts': districts_serializer.data,
         }, status=status.HTTP_200_OK)
  
+class MessagesView(APIView):
+    def get(self, request):
+        token = request.headers.get('Authorization', '').split(' ')[-1]
+        if not token:
+            return Response({'error': 'Token not provided'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            user_id = payload.get('user_id')
+            user = User.objects.get(id=user_id)
+        except jwt.ExpiredSignatureError:
+            return Response({'error': 'Token has expired'}, status=status.HTTP_401_UNAUTHORIZED)
+        except jwt.InvalidTokenError:
+            return Response({'error': 'Invalid token'}, status=status.HTTP_401_UNAUTHORIZED)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        messages = []
+        keys = cache.keys(f'message_{user.username}_*')
+        if keys:
+            for key in keys:
+                message = cache.get(key)
+                messages.append(message)
+                cache.delete(key)
+        return Response({'messages': messages}, status=status.HTTP_200_OK)
+    
+class UsersView(APIView):
+    def get(self, request):
+        token = request.headers.get('Authorization', '').split(' ')[-1]
+        if not token:
+            return Response({'error': 'Token not provided'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            user_id = payload.get('user_id')
+            user = User.objects.get(id=user_id)
+        except jwt.ExpiredSignatureError:
+            return Response({'error': 'Token has expired'}, status=status.HTTP_401_UNAUTHORIZED)
+        except jwt.InvalidTokenError:
+            return Response({'error': 'Invalid token'}, status=status.HTTP_401_UNAUTHORIZED)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        users = User.objects.filter(city=user.city).exclude(id=user.id)
+        users_serializer = CustomUserSerializer(users, many=True)
+       
+        return Response({
+            'users': users_serializer.data,
+        }, status=status.HTTP_200_OK)

@@ -1,8 +1,22 @@
 import cardsIcon from '../../assets/cards.svg';
 import buttonGreenImage from '../../assets/button-green.svg';
 import copyIcon from '../../assets/copy.svg';
+import useMessages from '../../hooks/useMessages';
 
 function Cards() {
+  const { addMessage } = useMessages();
+  const handleCopyClick = (textToCopy) => {
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      console.log("Текст скопирован в буфер обмена");
+      addMessage({
+        type: 'success',
+        text: '',
+        name: 'Скопировано'
+      })
+    }).catch((err) => {
+      console.error("Не удалось скопировать текст: ", err);
+    });
+  };
   return (
     <div className="relative w-[100%] h-screen overflow-hidden">
       <div className="relative w-[100%] mt-[4.66%]">
@@ -13,14 +27,14 @@ function Cards() {
         <div className="uppercase font-[600] text-[14px] leading-[16.8px] text-center text-[rgba(255,255,255,.5)] mt-[8.32%]">
             номер телефона
         </div>
-        <div className="flex items-center justify-center gap-[5.128%] bg-[#1B1F28] h-[62px] w-[89.74%] mx-auto mt-[4.66%]" style={{clipPath: 'polygon(0% 0%, 100% 0%, 100% 66.13%, 94.29% 100%, 5.71% 100%, 0% 66.13%)'}}>
+        <div onClick={() => handleCopyClick("+7(911) 298-75-08")} className="cursor-pointer flex items-center justify-center gap-[5.128%] bg-[#1B1F28] h-[62px] w-[89.74%] mx-auto mt-[4.66%]" style={{clipPath: 'polygon(0% 0%, 100% 0%, 100% 66.13%, 94.29% 100%, 5.71% 100%, 0% 66.13%)'}}>
             <div className="font-[400] text-[16px] leading-[19.2px] text-center text-[#00D5FF]">+7(911) 298-75-08</div>
             <img src={copyIcon} alt="" className="w-[24px] h-[24px]" />
         </div>
         <div className="uppercase font-[600] text-[14px] leading-[16.8px] text-center text-[rgba(255,255,255,.5)] mt-[4.66%]">
             номер Карты
         </div>
-        <div className="flex items-center justify-center gap-[5.128%] bg-[#1B1F28] h-[62px] w-[89.74%] mx-auto mt-[4.66%]" style={{clipPath: 'polygon(0% 0%, 100% 0%, 100% 66.13%, 94.29% 100%, 5.71% 100%, 0% 66.13%)'}}>
+        <div onClick={() => handleCopyClick("4264 8726 2212 0076")} className="cursor-pointer flex items-center justify-center gap-[5.128%] bg-[#1B1F28] h-[62px] w-[89.74%] mx-auto mt-[4.66%]" style={{clipPath: 'polygon(0% 0%, 100% 0%, 100% 66.13%, 94.29% 100%, 5.71% 100%, 0% 66.13%)'}}>
             <div className="font-[400] text-[16px] leading-[19.2px] text-center text-[#00D5FF]">4264 8726 2212 0076</div>
             <img src={copyIcon} alt="" className="w-[24px] h-[24px]" />
         </div>

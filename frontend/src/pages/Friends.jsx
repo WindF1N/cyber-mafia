@@ -4,30 +4,42 @@ import avatarImage from '../assets/avatar.png';
 import frameIcon from '../assets/frame.svg';
 import starGrayIcon from '../assets/star-gray.svg';
 import starGoldIcon from '../assets/star-gold.svg';
-import searchIcon from '../assets/search.svg';
-import filterIcon from '../assets/filter.svg';
+import copyWhiteIcon from '../assets/copy-white.svg';
+import buttonForReflinkImage from '../assets/button-for-reflink.svg';
+import ratingImage from '../assets/image.png';
 
 function Friends() {
   const navigate = useNavigate();
+  const [ listType, setListType] = useState('friends');
   useEffect(() => {
     var BackButton = window.Telegram.WebApp.BackButton;
     BackButton.hide();
   }, [])
   return (
     <div className="relative w-[100%] min-h-screen overflow-hidden pb-[200px]">
-      <div className="relative mt-[4.66%]">
-        <div className="uppercase text-center font-[600] text-[18px] leading-[21.6px] text-white">Участники клуба</div>
+      <div className="relative w-[100%] mt-[4.66%]">
+        <div className="w-[28.72%] h-[63.67%] bg-[#00D5FF] rounded-[100%] absolute left-0 right-0 top-[12.11%] blur-[100px] mx-auto z-[-1]"></div>
+        <img src={ratingImage} alt="" className="w-[100%]" />
+        <div className="uppercase font-[600] text-[18px] leading-[21.6px] text-center text-white absolute left-0 right-0 mx-auto bottom-[22.49%]">Приглашай друзей,<br/>зарабатывай баллы</div>
+        <div className="font-[400] text-[12px] leading-[15.6px] text-center text-white absolute left-0 right-0 mx-auto bottom-[7.96%]">Получайте по <span className="text-[#FFEA00]">50 баллов</span> за<br/>каждого друга!</div>
       </div>
-      <div className="relative w-[89.74%] mx-auto mt-[4.66%] bg-[#1B1F28] h-[62px] w-[100%] flex items-center p-[20px]" style={{clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 17px 100%, 0% 47.5px)"}}>
-        <div>
-          <img src={searchIcon} alt="" className="w-[24px] h-[24px]" />
+      <div className="relative w-[89.74%] mt-[4.66%] mx-[5.13%]">
+        <img src={buttonForReflinkImage} alt="" className="w-[100%]" />
+        <div className="cursor-pointer absolute inset-0 m-auto flex items-center justify-center gap-[2.564%]">
+          <div className="uppercase font-[600] text-[12px] leading-[14.4px] text-center">ваша реферальная ссылка</div>
+          <div>
+            <img src={copyWhiteIcon} alt="" className="w-[20px] h-[20px]" />
+          </div>
         </div>
-        <div>
-          <input type="text" className="relative w-[100%] p-0 px-[10px] m-0 h-[100%] bg-inherit text-center hover:outline-0 active:outline-0 z-2 outline-0 focus:outline-0" />
+      </div>
+      <div className="relative w-[89.74%] mt-[4.66%] mx-[5.13%] flex items-center justify-center">
+        <div className="relative cursor-pointer">
+          <div className="uppercase font-[600] text-[18px] leading-[21.6px] text-white text-center">Мои друзья</div>
+          {/* <div className="absolute bottom-[-4px] h-[2px] w-[100%] bg-[#25E9FF]" style={{clipPath: 'polygon(0% 0%, 100% 0%, 98.113% 100%, 1.887% 100%)'}}></div> */}
         </div>
-        <div>
-          <img src={filterIcon} alt="" className="w-[24px] h-[24px]" />
-        </div>
+        {/* <div className="relative cursor-pointer" onClick={() => setListType("participants")}>
+          <div className="uppercase font-[600] text-[18px] leading-[21.6px] text-[rgba(255,255,255,.3)] text-center">Участники</div>
+        </div> */}
       </div>
       <div className="relative mt-[4.66%]">
         <div className="relative flex items-center justify-center w-[100%] h-[70px] mt-[2.66%] px-[5.128%]">

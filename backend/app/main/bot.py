@@ -11,7 +11,6 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
-from aiogram.dispatcher.middlewares import BaseMiddleware
 from aiogram.utils.exceptions import InvalidQueryID
 import re
 
@@ -19,11 +18,11 @@ from main.models import CustomUser, City, Game, Participant, Peculiarity
 from django.conf import settings
 from django.db import close_old_connections, connections
 from asgiref.sync import sync_to_async
-from django.core.exceptions import ObjectDoesNotExist
 from main.utils import update_messages
+from django.core.cache import cache
 import io
 
-API_TOKEN = '7485718014:AAHGbSQCgY7bM1FTLw8SUw-9NWTK7o3CJMo'
+API_TOKEN = settings.TELEGRAM_BOT_TOKEN
 
 # Инициализация бота и диспетчера
 bot = Bot(token=API_TOKEN)
@@ -734,19 +733,28 @@ async def send_statistic_link(message: types.Message):
         types.InlineKeyboardButton(f"Афиша игр 🎟️", callback_data=f'go_poster'),
         types.InlineKeyboardButton(f"Главное меню 🔙", callback_data=f'go_main')
     )
+    number_of_games = cache.get(f"number_of_games_{message.from_user.id}", 0)
+    number_of_victories = cache.get(f"number_of_victories_{message.from_user.id}", 0)
+    trust_level = cache.get(f"trust_level_{message.from_user.id}", 0)
+    activity = cache.get(f"activity_{message.from_user.id}", "отстутствует")
+    best_roles = cache.get(f"best_roles_{message.from_user.id}", None) # [["Хакер", "2 победы", "👋🏿"], ["Хакер", "2 победы", "👋🏿"], ["Хакер", "2 победы", "👋🏿"]]
+    best_roles_str = ""
+    if best_roles:
+        best_roles_str = "\n"
+        for best_role in best_roles:
+            best_roles_str += f"                {best_role[0]} ({best_role[1]}) {best_role[2]}\n"
+    else:
+        best_roles_str = "отстутствуют"
     msg = await bot.send_message(message.chat.id, f"""
 📊 <b>Твоя личная статистика:</b>
                            
 Вот твои достижения и статистика за всё время участия в играх Cyber Mafia! 🎮
                                  
-        <b>Всего игр:</b> 15 🎲
-        <b>Побед:</b> 8 🏆
-        <b>Лучшие роли:</b>
-                Хакер (3 победы) 💻
-                Кибердетектив (2 победы) 🔍
-                Корпоративный шпион (3 победы) 🕵️‍♂️
-        <b>Уровень доверия:</b> 85% 🔒
-        <b>Активность:</b> 7 игр за последний месяц 📅
+        <b>Всего игр:</b> {number_of_games} 🎲
+        <b>Побед:</b> {number_of_victories} 🏆
+        <b>Лучшие роли:</b> {best_roles_str}
+        <b>Уровень доверия:</b> {trust_level}% 🔒
+        <b>Активность:</b> {activity} 📅
                            
 🔥 <b>Продолжай в том же духе и повышай свои навыки в Cyber Mafia!</b>
 
@@ -765,26 +773,32 @@ async def send_myclub_link(message: types.Message, state=FSMContext):
         await update_messages(bot, message.chat.id, [message.message_id, msg.message_id])
         return
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("Написать участнику ✉️", callback_data="chat_participant"))
+    markup.add(types.InlineKeyboardButton("Весь рейтинг ", callback_data="chat_participant"))
+    user_id = message.from_user.id
+    user_queryset = await sync_to_async(CustomUser.objects.filter)(username=str(user_id))
+    user = await sync_to_async(lambda: user_queryset.first())()
+    if user:
+        city = await sync_to_async(getattr)(user, 'city')
+    users_queryset = await sync_to_async(CustomUser.objects.filter)(city=city)
+    users = await sync_to_async(list)(users_queryset[:10])
+    users_str = "\n\n"
+    if len(users) > 0:
+        i = 1
+        for user in users:
+            number_of_victories = await cache.aget(f"number_of_victories_{user.username}", 0)
+            level = await sync_to_async(getattr)(user, 'level')
+            users_str += f"{i}. {user.nickname if user.nickname else user.first_name} — Лига: {level.name if level else 'Нету'} | Побед: {number_of_victories}\n\n"
+            i += 1
+    else:
+        users_str += "Нет игроков"
     msg1 = await bot.send_message(message.chat.id, f"""
-👥 <b>Члены клуба Cyber Mafia</b>
-                           
-Здесь ты можешь увидеть список активных участников клуба Cyber Mafia в Санкт-Петербурге. Найди новых друзей, союзников или потенциальных соперников! 🤝
-                           
-🔍 <b>Топ игроков:</b>
-                           
-        <b>Алексей Смирнов</b> — Уровень: Эксперт 🌟 | Побед: 20 🏆
-        <b>Мария Петрова</b> — Уровень: Ветеран 🏅 | Побед: 18 🏆
-        <b>Дмитрий Иванов</b> — Уровень: Продвинутый 🌟 | Побед: 15 🏆
-        <b>Анна Козлова</b> — Уровень: Новичок 🥉 | Побед: 5 🏆
-                           
-👥 <b>Другие участники:</b>
-                           
-        <b>Ольга Федорова</b> — Уровень: Продвинутый 🌟
-        <b>Виктор Крылов</b> — Уровень: Новичок 🥉
-        <b>Ирина Соколова</b> — Уровень: Эксперт 🌟
-                           
-✨ <b>Свяжись с участниками и укрепляй свои связи в клубе!</b>
+<b>Члены клуба Cyber Mafia</b> 🕵️‍♂️💻
+
+Здесь ты можешь узнать топ-игроков клуба и посмотреть полный список участников. Встреть новых друзей, найди союзников или определи потенциальных соперников! 💪
+
+🔥 <b>Топ-10 игроков:</b>{users_str}🌐 Полный список участников можно посмотреть по ссылке.
+
+Свяжись с участниками и укрепляй свои связи в клубе! ✉️🤝
 """, reply_markup=markup, parse_mode='HTML')
     markup = types.InlineKeyboardMarkup()
     markup.add(types.InlineKeyboardButton("Главное меню 🔙", callback_data="go_main"))

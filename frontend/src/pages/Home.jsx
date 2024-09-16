@@ -24,16 +24,21 @@ function Home() {
            className="absolute inset-0 w-[100%]"
         />
       <div className="absolute top-[2.67%] left-[5.13%] w-[89.74%] flex ">
-        <div className="relative cursor-pointer w-[69.571%]" onClick={() => navigate("/profile")}>
+        <div className="relative cursor-pointer w-[69.571%]" onClick={() => navigate("/profile/"+account?.user?.id)}>
             <img src={rectangle1Icon} alt="" className="w-[100%] backdrop-blur-[40px]" style={{clipPath: 'polygon(0% 0%, 91.5% 0%, 100% 26%, 100% 100%, 8.2% 100%, -24.5% 0%)'}} />
             <div className="absolute inset-0 w-[100%] h-[100%] flex items-center gap-[2.05%]">
               <div className="relative h-[58px] w-[58px] my-[12.5%] mx-[4.11%]" style={{clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 20% 100%, 0% 80%)'}}>
-                <img src={account.user.avatar ? apiUrl+account.user.avatar : avatarImage} alt="" className="w-[100%] h-[100%] object-cover" />
+                {account?.user?.avatar ? 
+                  <img className="w-[100%] h-[100%] object-cover" src={apiUrl+account?.user?.avatar} alt="" />
+                :
+                  <div className="w-[100%] h-[100%] bg-[#1B1F28] flex items-center justify-center font-[700] text-[28px] uppercase">{!account?.user.nickname ? account?.user.first_name.slice(0, 1) : account?.user.nickname.slice(0, 1)}</div>
+                }
                 <img src={frameIcon} alt="" className="absolute inset-0 w-[100%] h-[100%] object-cover" />
               </div>
               <div className="flex flex-col">
-                <div className="uppercase font-[600] text-[14px] leading-[16.8px] text-white mb-[14.5%]">{account.user.first_name || account.user.nickname}</div>
-                <div className="uppercase font-[400] text-[12px] leading-[14.4px] text-[rgba(255,255,255,0.7)]">{account.city.name}</div>
+                <div className="uppercase font-[600] text-[14px] leading-[16.8px] text-white">{!account?.user.nickname ? account?.user.first_name : account?.user.nickname}</div>
+                <div className="uppercase font-[400] text-[10px] leading-[12px] text-[#25E9FF] mt-[5px]">{account?.level?.name}</div>
+                <div className="uppercase font-[400] text-[12px] leading-[14.4px] text-[rgba(255,255,255,0.7)] mt-[5px]">{account?.city.name}</div>
               </div>
             </div>
         </div>

@@ -11,16 +11,25 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import environ
+import os
+
+import pymysql
+pymysql.install_as_MySQLdb()
+
+env = environ.Env()
+env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../.env'))
+environ.Env.read_env(env_path)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-xn&&i)rrv%uk+yh9w-jc3kro5&*^s!eou985ayv(n7)0zbvp_j'
+TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -71,23 +80,31 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'app.wsgi.application'
+ASGI_APPLICATION = 'app.asgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],  # Адрес и порт Redis
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cyber_mafia',  # Имя вашей базы данных
-        'USER': 'root',  # Имя пользователя MySQL
-        'PASSWORD': 'Bilibaben9518!',  # Пароль пользователя MySQL
-        'HOST': 'localhost',  # Хост MySQL сервера
-        'PORT': '3306',  # Порт MySQL сервера
+        'ENGINE': env('DATABASE_ENGINE'),
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST': env('DATABASE_HOST'),
+        'PORT': env('DATABASE_PORT'),
         'OPTIONS': {
             'charset': 'utf8mb4',
-        }
+        },
     }
 }
 
@@ -126,11 +143,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_ROOT = BASE_DIR / 'static'
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -153,10 +170,26 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
-TELEGRAM_BOT_TOKEN = '7485718014:AAHGbSQCgY7bM1FTLw8SUw-9NWTK7o3CJMo'
-
 CORS_ALLOWED_ORIGINS = [
     "https://127.0.0.1:5173",
     "http://127.0.0.1:5173",
     "https://172.18.180.15:5173"
 ]
+
+# Настройки кэша
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",  # Адрес Redis сервера и номер базы данных
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# Настройки сессий (опционально)
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+# Настройки сообщений (опционально)
+MESSAGE_STORAGE = 'django.contrib.messages.storage.fallback.FallbackStorage'
