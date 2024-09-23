@@ -12,7 +12,7 @@ import Friends from './pages/Friends';
 import Rules from './pages/Rules';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.Fragment>
+  <React.StrictMode>
     <Router>
       <Routes>
         <Route path="/" element={<App />}>
@@ -26,5 +26,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </Route>
       </Routes>
     </Router>
-  </React.Fragment>
+  </React.StrictMode>
 );

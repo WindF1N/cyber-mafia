@@ -31,14 +31,14 @@ function Home() {
                 {account?.user?.avatar ? 
                   <img className="w-[100%] h-[100%] object-cover" src={apiUrl+account?.user?.avatar} alt="" />
                 :
-                  <div className="w-[100%] h-[100%] bg-[#1B1F28] flex items-center justify-center font-[700] text-[28px] uppercase">{!account?.user.nickname ? account?.user.first_name.slice(0, 1) : account?.user.nickname.slice(0, 1)}</div>
+                  <div className="w-[100%] h-[100%] bg-[#1B1F28] flex items-center justify-center font-[700] text-[28px] uppercase">{!account?.user?.nickname ? account?.user?.first_name.slice(0, 1) : account?.user?.nickname.slice(0, 1)}</div>
                 }
                 <img src={frameIcon} alt="" className="absolute inset-0 w-[100%] h-[100%] object-cover" />
               </div>
               <div className="flex flex-col">
-                <div className="uppercase font-[600] text-[14px] leading-[16.8px] text-white">{!account?.user.nickname ? account?.user.first_name : account?.user.nickname}</div>
+                <div className="uppercase font-[600] text-[14px] leading-[16.8px] text-white">{!account?.user?.nickname ? account?.user?.first_name : account?.user?.nickname}</div>
                 <div className="uppercase font-[400] text-[10px] leading-[12px] text-[#25E9FF] mt-[5px]">{account?.level?.name}</div>
-                <div className="uppercase font-[400] text-[12px] leading-[14.4px] text-[rgba(255,255,255,0.7)] mt-[5px]">{account?.city.name}</div>
+                <div className="uppercase font-[400] text-[12px] leading-[14.4px] text-[rgba(255,255,255,0.7)] mt-[5px]">{account?.city?.name}</div>
               </div>
             </div>
         </div>
