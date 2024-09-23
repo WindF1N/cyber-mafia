@@ -23,10 +23,18 @@ class RoleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class GameSerializer(serializers.ModelSerializer):
+    is_booking = serializers.SerializerMethodField()
+
     class Meta:
         model = Game
         fields = '__all__'
-
+    
+    def get_is_booking(self, obj):
+        user = self.context.get('user')
+        if user:
+            return Participant.objects.filter(user=user, game=obj).exists()
+        return False
+        
 class PeculiaritySerializer(serializers.ModelSerializer):
     class Meta:
         model = Peculiarity
@@ -52,7 +60,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
                   'district', 'nickname', 'date_joined',
                   'level', 'is_registered', 'points',
                   'number_of_games', 'number_of_victories', 
-                  'trust_level', 'best_roles',
+                  'trust_level', 'best_roles', 'referral_code', 'referral_code',
                   'completed_games_for_mafia',
                   'completed_games_for_civilian',
                   'completed_games_for_werewolf',

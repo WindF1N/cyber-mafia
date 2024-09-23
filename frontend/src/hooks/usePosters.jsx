@@ -1,17 +1,17 @@
 import { create } from 'zustand';
 
-const useUsers = create((set) => ({
-  users: [],
+const usePosters = create((set) => ({
+  posters: [],
   isLoading: true,
   limit: 5,
   offset: 0,
   total: 0,
-  search: '',
-  setUsers: (users) => set({ users }),
+  city: null,
+  setPosters: (posters) => set({ posters }),
   setIsLoading: (isLoading) => set({ isLoading }),
   setTotal: (total) => set({ total }),
   setOffset: (offset) => set({ offset }),
-  setSearch: (search) => set({ search }),
+  setCity: (city) => set({ city }),
 }));
 
-export default useUsers;
+export default usePosters;

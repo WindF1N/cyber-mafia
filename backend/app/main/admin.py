@@ -38,7 +38,7 @@ class PeculiarityAdmin(admin.ModelAdmin):
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'first_name', 'city', 'phone', 'avatar', 'is_registered')
+    list_display = ('username', 'first_name', 'city', 'phone', 'referral_code', 'referred_by', 'is_registered')
     list_filter = ('city', 'is_registered')
     search_fields = ('username', 'first_name', 'phone')
     fieldsets = (
@@ -46,7 +46,7 @@ class CustomUserAdmin(admin.ModelAdmin):
             'fields': ('username', 'password')
         }),
         ('Personal info', {
-            'fields': ('first_name', 'last_name', 'email', 'avatar', 'sex', 'phone', 'city', 'district', 'nickname', 'level')
+            'fields': ('first_name', 'last_name', 'email', 'avatar', 'sex', 'phone', 'city', 'district', 'nickname', 'level', 'referral_code','referred_by')
         }),
         ('Permissions', {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')

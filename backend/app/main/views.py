@@ -8,12 +8,16 @@ import hmac
 import hashlib
 from django.conf import settings
 from django.core.cache import cache
+from django.db.models import Q
+from django.utils import timezone
 import json
 import traceback
+import string
+import random
 from .serializers import (
-    CustomUserSerializer, CitySerializer, DistrictSerializer, LevelSerializer
+    CustomUserSerializer, CitySerializer, DistrictSerializer, LevelSerializer, GameSerializer
 )
-from .models import City, District
+from .models import City, District, Game, Participant
 
 User = get_user_model()
 
@@ -24,7 +28,19 @@ class TelegramAuthView(APIView):
             if self.verify_telegram_init_data(init_data):
                 user_data = self.extract_user_data(init_data)
                 user, created = User.objects.get_or_create(username=str(user_data['telegram_id']))
+                user.referral_code = self.generate_referral_code()
+                user.save()
                 # Добавляем персонажа с типом standart
+                if created:
+                    if 'start_param' in init_data:
+                        try:
+                            referred_user = User.objects.get(referral_code=init_data['start_param'][0])
+                            user.referred_by = referred_user
+                            user.save()
+                            referred_user.points += 50
+                            referred_user.save()
+                        except:
+                            pass
                 payload = {
                     'user_id': user.id,
                     'telegram_id': str(user_data['telegram_id']),
@@ -53,6 +69,13 @@ class TelegramAuthView(APIView):
         return {
             'telegram_id': user_dict['id']
         }
+    
+    def generate_referral_code(self):
+        characters = string.ascii_letters + string.digits
+        while True:
+            code = ''.join(random.choice(characters) for _ in range(6))
+            if not User.objects.filter(referral_code=code).exists():
+                return code
             
 class AccountInfoView(APIView):
     def get(self, request):
@@ -239,9 +262,132 @@ class UsersView(APIView):
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         
-        users = User.objects.filter(city=user.city).exclude(id=user.id)
+        # Извлекаем параметры limit, offset и search из запроса
+        limit = int(request.query_params.get('limit', 5))
+        offset = int(request.query_params.get('offset', 0))
+        search = request.query_params.get('search', '')
+
+        # Фильтруем пользователей по городу, исключая текущего пользователя
+        users_query = User.objects.filter(city=user.city).exclude(id=user.id)
+
+        # Применяем фильтр поиска, если параметр search задан
+        if search:
+            users_query = users_query.filter(
+                Q(first_name__icontains=search) | Q(nickname__icontains=search)
+            )
+
+        # Применяем пагинацию
+        users = users_query[offset:offset+limit]
         users_serializer = CustomUserSerializer(users, many=True)
        
         return Response({
             'users': users_serializer.data,
+            'total': users_query.count()
+        }, status=status.HTTP_200_OK)
+    
+class FriendsView(APIView):
+    def get(self, request):
+        token = request.headers.get('Authorization', '').split(' ')[-1]
+        if not token:
+            return Response({'error': 'Token not provided'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            user_id = payload.get('user_id')
+            user = User.objects.get(id=user_id)
+        except jwt.ExpiredSignatureError:
+            return Response({'error': 'Token has expired'}, status=status.HTTP_401_UNAUTHORIZED)
+        except jwt.InvalidTokenError:
+            return Response({'error': 'Invalid token'}, status=status.HTTP_401_UNAUTHORIZED)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Извлекаем параметры limit, offset и search из запроса
+        limit = int(request.query_params.get('limit', 5))
+        offset = int(request.query_params.get('offset', 0))
+
+        # Фильтруем пользователей по городу, исключая текущего пользователя
+        users_query = User.objects.filter(referred_by=user)
+
+        # Применяем пагинацию
+        users = users_query[offset:offset+limit]
+        users_serializer = CustomUserSerializer(users, many=True)
+       
+        return Response({
+            'users': users_serializer.data,
+            'total': users_query.count()
+        }, status=status.HTTP_200_OK)
+    
+
+class PostersView(APIView):
+    def get(self, request):
+        token = request.headers.get('Authorization', '').split(' ')[-1]
+        if not token:
+            return Response({'error': 'Token not provided'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            user_id = payload.get('user_id')
+            user = User.objects.get(id=user_id)
+        except jwt.ExpiredSignatureError:
+            return Response({'error': 'Token has expired'}, status=status.HTTP_401_UNAUTHORIZED)
+        except jwt.InvalidTokenError:
+            return Response({'error': 'Invalid token'}, status=status.HTTP_401_UNAUTHORIZED)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Извлекаем параметры limit, offset и search из запроса
+        limit = int(request.query_params.get('limit', 5))
+        offset = int(request.query_params.get('offset', 0))
+        city_id = request.query_params.get('city_id', '')
+
+        try:
+            city = City.objects.get(id=city_id)
+        except City.DoesNotExist:
+            return Response({'error': 'City not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Фильтруем пользователей по городу, исключая текущего пользователя
+        posters_query = Game.objects.filter(city=city, datetime__gte=timezone.now())
+        posters = posters_query[offset:offset+limit]
+        posters_serializer = GameSerializer(posters, context={"user": user}, many=True)
+       
+        return Response({
+            'posters': posters_serializer.data,
+            'total': posters_query.count()
+        }, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        token = request.headers.get('Authorization', '').split(' ')[-1]
+        if not token:
+            return Response({'error': 'Token not provided'}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            user_id = payload.get('user_id')
+            user = User.objects.get(id=user_id)
+        except jwt.ExpiredSignatureError:
+            return Response({'error': 'Token has expired'}, status=status.HTTP_401_UNAUTHORIZED)
+        except jwt.InvalidTokenError:
+            return Response({'error': 'Invalid token'}, status=status.HTTP_401_UNAUTHORIZED)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        poster_id = request.data.get('poster_id')
+
+        if not poster_id:
+            return Response({'error': 'Invalid poster_id'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            poster = Game.objects.get(id=poster_id)
+        except Game.DoesNotExist:
+            return Response({'error': 'Invalid poster_id'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            participant = Participant.objects.get(user=user, game=poster)
+            participant.delete()
+            is_booking = False
+        except Participant.DoesNotExist:
+            participant = Participant.objects.create(user=user, game=poster)
+            is_booking = True
+        
+        return Response({
+            'is_booking': is_booking
         }, status=status.HTTP_200_OK)

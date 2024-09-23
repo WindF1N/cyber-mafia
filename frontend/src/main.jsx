@@ -9,6 +9,7 @@ import Payments from './pages/Payments';
 import Payment from './pages/Payment';
 import Rating from './pages/Rating';
 import Friends from './pages/Friends';
+import Rules from './pages/Rules';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.Fragment>
@@ -20,7 +21,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="payments" element={<Payments />} />
           <Route path="payments/:paymentType" element={<Payment />} />
           <Route path="rating" element={<Rating />} />
-          <Route path="rules" element={<></>} />
+          <Route path="rules" element={<Rules />} />
           <Route path="friends" element={<Friends />} />
         </Route>
       </Routes>

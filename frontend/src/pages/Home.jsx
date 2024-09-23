@@ -50,11 +50,11 @@ function Home() {
             </div>
         </div>
       </div>
-      <div className="absolute bottom-[15.33%] left-0 w-[100%]">
+      {/* <div className="absolute bottom-[15.33%] left-0 w-[100%]">
         <img src={goPlayImage} alt="" className="w-[100%]" />
         <div className="uppercase absolute left-0 top-[17.925%] font-[600] text-[24px] leading-[28.8px] w-[100%] text-center text-white">Войти в игру</div>
         <div className="uppercase absolute left-0 top-[71.698%] font-[600] text-[16px] leading-[19.2px] w-[100%] text-center text-[rgba(255,234,0,1)]">( вы в игре )</div>
-      </div>
+      </div> */}
     </div>
   );
 }

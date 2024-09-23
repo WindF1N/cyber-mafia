@@ -63,8 +63,8 @@ class Game(models.Model):
         return f"{self.small_address} {self.datetime.date()}"
 
     class Meta:
-        verbose_name = "Игра"
-        verbose_name_plural = "Игры"
+        verbose_name = "Постер"
+        verbose_name_plural = "Постеры"
 
 class Peculiarity(models.Model):
     game = models.ForeignKey(Game, related_name='peculiarities', on_delete=models.CASCADE, verbose_name="Игра")
@@ -92,6 +92,8 @@ class CustomUser(AbstractUser):
     level = models.ForeignKey('Level', related_name='users', blank=True, null=True, on_delete=models.SET_NULL, verbose_name="Лига")
     points = models.PositiveIntegerField(default=0, verbose_name="Количество баллов")
     is_registered = models.BooleanField(default=False, verbose_name="Зарегистрирован")
+    referral_code = models.CharField(max_length=255, unique=True, null=True, blank=True, verbose_name="Реферальный код")
+    referred_by = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Пригласил")
 
     # games_played = models.PositiveIntegerField(default=0, verbose_name="Количество сыгранных игр")
     # games_won = models.PositiveIntegerField(default=0, verbose_name="Количество выйграных игр")
