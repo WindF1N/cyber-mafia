@@ -85,7 +85,7 @@ function Rating() {
         <div>
           <img src={searchIcon} alt="" className="w-[24px] h-[24px]" />
         </div>
-        <div>
+        <div className="w-[100%]">
           <input type="text" name="search" value={search} onChange={(event) => setSearch(event.target.value)} onBlur={() => offset === 0 && setIsLoading(true)} className="relative w-[100%] p-0 px-[10px] m-0 h-[100%] bg-inherit text-center hover:outline-0 active:outline-0 z-2 outline-0 focus:outline-0" />
         </div>
         <div>
