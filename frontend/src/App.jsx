@@ -8,6 +8,7 @@ import useAuthStore from './hooks/useAuthStore';
 import useAccount from './hooks/useAccount';
 import useMessages from './hooks/useMessages';
 import LoadingSpinner from './components/LoadingSpinner';
+import SignUp from './pages/SignUp';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -167,8 +168,15 @@ function App() {
             <OnboardingSlider onComplete={handleOnboardingComplete} setLoadedImagesCount={setLoadedImagesCount} loading={loading} />
           </div>
           <div style={isLoading || showOnboarding ? {display: "none"} : null}>
-            <Outlet />
-            <Menu currentPage={currentPage} setLoadedImagesCount={setLoadedImagesCount} />
+            {account?.user?.is_registered ?
+            <>
+              <Outlet />
+              <Menu currentPage={currentPage} setLoadedImagesCount={setLoadedImagesCount} />
+            </>
+            :
+            <>
+              <SignUp />
+            </>}
           </div>
       </div>
       <div className="relative w-[100%] h-[100%] overflow-hidden flex items-center justify-center" style={loading ? null : { display: "none"}}>

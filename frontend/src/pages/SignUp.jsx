@@ -59,7 +59,7 @@ function SignUp() {
         }
     }, [token, selectedCity]);
     const handleSubmit = (e) => {
-        fetch(apiUrl+'/me/', {
+        fetch(apiUrl+'/user/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
