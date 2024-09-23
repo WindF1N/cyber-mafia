@@ -182,8 +182,8 @@ function Rules() {
                         </div>
                     </div>
                 </div>
-                <div className="relative px-[4px] cursor-pointer" onClick={() => handleClick(poster.id)}>
-                    <img src={buttonBlueIcon} alt="" />
+                <div className="relative px-[4px] cursor-pointer w-[100%]" onClick={() => handleClick(poster.id)}>
+                    <img src={buttonBlueIcon} alt="" className="w-[100%]" />
                     <div className="absolute inset-0 w-[100%] h-[100%] flex items-center justify-center uppercase font-[600] text-[#00D5FF] text-[14px] leading-[16.8px]">
                         {!poster.is_booking ? "Записаться" : "Убрать бронь" }
                     </div>
