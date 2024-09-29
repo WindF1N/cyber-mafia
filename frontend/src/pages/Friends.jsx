@@ -86,7 +86,7 @@ function Friends() {
         <div className="uppercase font-[600] text-[18px] leading-[21.6px] text-center text-white absolute left-0 right-0 mx-auto bottom-[22.49%]">Приглашай друзей,<br/>зарабатывай баллы</div>
         <div className="font-[400] text-[12px] leading-[15.6px] text-center text-white absolute left-0 right-0 mx-auto bottom-[7.96%]">Получайте по <span className="text-[#FFEA00]">50 баллов</span> за<br/>каждого друга!</div>
       </div>
-      <div className="relative w-[89.74%] mt-[4.66%] mx-[5.13%]" onClick={() => handleCopyClick("https://t.me/cyber_mafia_dev_bot/dev?startapp="+account?.user?.referral_code)}>
+      <div className="relative w-[89.74%] mt-[4.66%] mx-[5.13%]" onClick={() => handleCopyClick("https://t.me/cybmafia_bot/CPM?startapp="+account?.user?.referral_code)}>
         <img src={buttonForReflinkImage} alt="" className="w-[100%]" />
         <div className="cursor-pointer absolute inset-0 m-auto flex items-center justify-center gap-[2.564%]">
           <div className="uppercase font-[600] text-[12px] leading-[14.4px] text-center">ваша реферальная ссылка</div>

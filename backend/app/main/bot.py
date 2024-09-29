@@ -80,7 +80,7 @@ async def return_to_home(message: types.Message, state: FSMContext):
         await update_messages(bot, message.chat.id, [message.message_id, msg.message_id])
         return
     markup = InlineKeyboardMarkup(row_width=1)
-    markup.insert(InlineKeyboardButton("Запустить приложение", url=f'https://t.me/cyber_mafia_dev_bot/dev'))
+    markup.insert(InlineKeyboardButton("Запустить приложение", url=f'https://t.me/cybmafia_bot/CPM'))
     msg = await bot.send_message(message.chat.id, "Добро пожаловать в приложение", reply_markup=markup)
     # Обновляем сообщения
     await update_messages(bot, message.chat.id, [message.message_id, msg.message_id])
